@@ -51,7 +51,9 @@ export default {
   name: 'SettingsIndex',
   async asyncData() {
     const { data } = await getUserInfo()
+    console.log(data)
     const { user } = data
+    console.log(user)
     return {
       user
     }
@@ -64,18 +66,17 @@ export default {
   },
   methods: {
     async updateSetting() {
-      this.btnDisabled = true
-      try {
-        const { data } = await updateUserInfo({ user: this.user })
-        this.$router.push({
-          name: 'profile',
-          params: {
-            username: data.user.username
-          }
-        })
-      } catch (err) {
-        this.errors = err.response.data.errors
+      const user = {
+        image: this.user.image || '',
+        username: this.user.username || '',
+        bio: this.user.bio || '',
+        email: this.user.email || '',
+        password: this.user.password || ''
       }
+      this.btnDisabled = true
+      const data = await updateUserInfo({ user })
+      // const data = await updateUserInfo({ user: this.user })
+      console.log(data)
       this.btnDisabled = false
     }
   }

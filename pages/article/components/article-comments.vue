@@ -61,8 +61,6 @@ export default {
   },
   async mounted() {
     const { data } = await getComments(this.article.slug)
-    console.log('=====')
-    console.log(data)
     this.comments = data.comments
   }
 }

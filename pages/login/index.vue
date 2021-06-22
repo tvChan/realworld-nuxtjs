@@ -10,11 +10,13 @@
             <nuxt-link v-else to="/login">Have an account?</nuxt-link>
           </p>
 
+          <!-- 错误信息 -->
           <ul class="error-messages">
             <template v-for="(messages, field) in errors">
               <li v-for="(message, index) in messages" :key="index">{{ field }} {{ message }}</li>
             </template>
           </ul>
+          <!-- 错误信息 -->
 
           <form @submit.prevent="onSubmit">
             <fieldset v-if="!isLogin" class="form-group">
@@ -30,7 +32,8 @@
                 class="form-control form-control-lg" type="password"
                 placeholder="Password" required minlength="8">
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right">
+            <button class="btn btn-lg btn-primary pull-xs-right"
+              :disabled="btnDisabled">
               {{ isLogin ? 'Sign in' : 'Sign up' }}
             </button>
           </form>
@@ -56,6 +59,7 @@ export default {
   },
   data () {
     return {
+      btnDisabled: false,
       user: {
         username: '',
         email: '',
@@ -66,6 +70,7 @@ export default {
   },
   methods: {
     async onSubmit () {
+      this.btnDisabled = true
       try {
         // 提交表单请求登录
         // const apiType = this.isLogin ? 'login' : 'register'
@@ -75,18 +80,16 @@ export default {
           }) : await register({
             user: this.user
           }) 
-        console.log(data)
         // TODO 保存用户的登录状态
         this.$store.commit('setUser', data.user)
 
         // 为了防止刷新页面数据丢失，我们需要把数据持久化
         Cookie.set('user', data.user)
-
         this.$router.push('/')
       } catch (err) {
-        console.log(err)
         this.errors = err.response.data.errors
       }
+      this.btnDisabled = false
     }
   }
 }

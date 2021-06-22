@@ -11,13 +11,21 @@
             <p>
               {{ profile.bio }}
             </p>
-            <template v-if="user">
+            <template v-if="user && user.username !== profile.username">
               <button class="btn btn-sm btn-outline-secondary action-btn"
                 :disabled="profile.followDisabled"
                 @click="onFollow(profile)">
                 <i :class="`ion-${profile.following ? 'minus': 'plus'}-round`"></i>
                 &nbsp;
                 {{ profile.following ? 'UnFollow' : 'Follow' }} {{ profile.username }} 
+              </button>
+            </template>
+            <template v-else>
+              <button class="btn btn-sm btn-outline-secondary action-btn"
+                @click="goEditProfile(profile)">
+                <i class="ion-gear-a"></i>
+                &nbsp;
+                 Edit Profile Settings
               </button>
             </template>
           </div>
@@ -112,7 +120,12 @@ export default {
         this.profile.followDisabled = true
       }
       this.profile.followDisabled = false
-    }
+    },
+    goEditProfile() {
+      this.$router.push({
+        name: 'settings'
+      })
+    } 
   }
 }
 </script>

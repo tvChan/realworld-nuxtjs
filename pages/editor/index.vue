@@ -7,19 +7,29 @@
           <form>
             <fieldset>
               <fieldset class="form-group">
-                  <input type="text" class="form-control form-control-lg" placeholder="Article Title">
+                  <input type="text" class="form-control form-control-lg"
+                    v-model="article.title"
+                    placeholder="Article Title">
               </fieldset>
               <fieldset class="form-group">
-                  <input type="text" class="form-control" placeholder="What's this article about?">
+                  <input type="text" class="form-control"
+                    v-model="article.description"
+                    placeholder="What's this article about?">
               </fieldset>
               <fieldset class="form-group">
-                  <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)"></textarea>
+                  <textarea class="form-control" rows="8"
+                    v-model="article.body"
+                    placeholder="Write your article (in markdown)"></textarea>
               </fieldset>
               <fieldset class="form-group">
-                  <input type="text" class="form-control" placeholder="Enter tags"><div class="tag-list"></div>
+                  <input type="text" class="form-control"
+                    v-model="article.tagList"
+                    placeholder="Enter tags"><div class="tag-list"></div>
               </fieldset>
-              <button class="btn btn-lg pull-xs-right btn-primary" type="button">
-                  Publish Article
+              <button class="btn btn-lg pull-xs-right btn-primary"
+                type="button" @click="createBtn()"
+                :disabled="btnDisabled">
+                  {{$route.params.slug ? 'Update' : 'Publish' }} Article
               </button>
             </fieldset>
           </form>
@@ -30,9 +40,48 @@
   </div>
 </template>
 <script>
+import { createArticle, getArticle } from '@/api/article'
+
 export default {
   // 在路由匹配组件渲染之前会先执行中间件处理
   middleware: 'authenticated',
-  name: 'EditorIndex'
+  name: 'EditorIndex',
+  data() {
+    return {
+      btnDisabled: false,
+      article: {
+        title: '',
+        description: '',
+        body: '',
+        tagList: []
+      }
+    }
+  },
+  async mounted() {
+    if (this.$route.params.slug) {
+      const { data } = await getArticle(this.$route.params.slug)
+      this.article = data.article
+      this.article.tagList = this.article.tagList.toString()
+    }
+  },
+  methods: {
+    async createBtn() {
+      this.btnDisabled = true
+      try {
+        const article = this.article
+        article.tagList = article.tagList.split(',')
+        const { data } = await createArticle({ article })
+        this.$router.push({
+          name: 'article',
+          params: {
+            slug: data.article.slug
+          }
+        })
+      } catch (err) {
+
+      }
+      this.btnDisabled = false
+    }
+  }
 }
 </script>

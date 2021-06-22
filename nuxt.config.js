@@ -5,7 +5,6 @@ module.exports = {
   router: {
     // 自定义路由表
     extendRoutes (routes, resolve) {
-      console.log(routes)
       // 清楚 Nuxt.js 基于 pages 目录默认生成的路由表规则
       routes.splice(0)
       routes.push(...[{
@@ -34,6 +33,10 @@ module.exports = {
         }, {
           path: '/editor', // 默认子路由
           name: 'editor',
+          component: resolve(__dirname, 'pages/editor/')
+        }, {
+          path: '/editor/:slug', // 默认子路由
+          name: 'updateEditor',
           component: resolve(__dirname, 'pages/editor/')
         }, {
           path: '/article/:slug', // 默认子路由

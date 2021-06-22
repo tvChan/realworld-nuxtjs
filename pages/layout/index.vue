@@ -11,28 +11,28 @@
           </li>
           <template v-if="user">
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/editor">
+              <nuxt-link class="nav-link" to="/editor" exact>
                 <i class="ion-compose"></i>&nbsp;New Post
               </nuxt-link>
             </li>
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/settings">
+              <nuxt-link class="nav-link" to="/settings" exact>
                 <i class="ion-gear-a"></i>&nbsp;Settings
               </nuxt-link>
             </li>
             <li class="nav-item">
-              <nuxt-link class="nav-link active" :to="`/profile/${user.id}`">
-                <img class="user-pic" :src="user.image">
+              <nuxt-link class="nav-link" :to="`/profile/${user.username}`" exact>
+                <img :src="user.image" class="user-pic" />
                 {{user.username}}
               </nuxt-link>
             </li>
           </template>
           <template v-else>
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/login">Sign in</nuxt-link>
+              <nuxt-link class="nav-link" to="/login" exact>Sign in</nuxt-link>
             </li>
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/register">Sign up</nuxt-link>
+              <nuxt-link class="nav-link" to="/register" exact>Sign up</nuxt-link>
             </li>
           </template>
         </ul>
@@ -45,7 +45,7 @@
     <!-- 底部 -->
     <footer>
       <div class="container">
-        <a href="/" class="logo-font">conduit</a>
+        <nuxt-link to="/" class="logo-font">conduit</nuxt-link>
         <span class="attribution">
           An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp; design licensed under MIT.
         </span>
