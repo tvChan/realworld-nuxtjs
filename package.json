@@ -16,6 +16,8 @@
     "nuxt": "^2.15.7"
   },
   "devDependencies": {
-    "dayjs": "^1.10.5"
+    "dayjs": "^1.10.5",
+    "js-cookie": "^2.2.1",
+    "markdown-it": "^12.0.6"
   }
 }
