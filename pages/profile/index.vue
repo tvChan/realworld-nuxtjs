@@ -11,11 +11,15 @@
             <p>
               {{ profile.bio }}
             </p>
-            <button class="btn btn-sm btn-outline-secondary action-btn">
-              <i class="ion-plus-round"></i>
-              &nbsp;
-              Follow {{ profile.username }} 
-            </button>
+            <template v-if="user">
+              <button class="btn btn-sm btn-outline-secondary action-btn"
+                :disabled="profile.followDisabled"
+                @click="onFollow(profile)">
+                <i :class="`ion-${profile.following ? 'minus': 'plus'}-round`"></i>
+                &nbsp;
+                {{ profile.following ? 'UnFollow' : 'Follow' }} {{ profile.username }} 
+              </button>
+            </template>
           </div>
 
         </div>
@@ -29,54 +33,33 @@
           <div class="articles-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <a class="nav-link active" href="">My Articles</a>
+                <nuxt-link class="nav-link"
+                  :class="{active: tab === 'My_Articles'}"
+                  exact
+                  :to="{
+                    name: 'profile',
+                    query: {
+                      tab: 'My_Articles'
+                    }
+                  }">My Articles</nuxt-link>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="">Favorited Articles</a>
+                <nuxt-link class="nav-link"
+                  :class="{active: tab === 'Favorited_Articles'}"
+                  exact
+                  :to="{
+                    name: 'profile',
+                    query: {
+                      tab: 'Favorited_Articles'
+                    }
+                  }">Favorited Articles</nuxt-link>
               </li>
             </ul>
           </div>
 
-          <div class="article-preview">
-            <div class="article-meta">
-              <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-              <div class="info">
-                <a href="" class="author">Eric Simons</a>
-                <span class="date">January 20th</span>
-              </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 29
-              </button>
-            </div>
-            <a href="" class="preview-link">
-              <h1>How to build webapps that scale</h1>
-              <p>This is the description for the post.</p>
-              <span>Read more...</span>
-            </a>
-          </div>
-
-          <div class="article-preview">
-            <div class="article-meta">
-              <a href=""><img src="http://i.imgur.com/N4VcUeJ.jpg" /></a>
-              <div class="info">
-                <a href="" class="author">Albert Pai</a>
-                <span class="date">January 20th</span>
-              </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 32
-              </button>
-            </div>
-            <a href="" class="preview-link">
-              <h1>The song you won't ever stop singing. No matter how hard you try.</h1>
-              <p>This is the description for the post.</p>
-              <span>Read more...</span>
-              <ul class="tag-list">
-                <li class="tag-default tag-pill tag-outline">Music</li>
-                <li class="tag-default tag-pill tag-outline">Song</li>
-              </ul>
-            </a>
-          </div>
-
+          <template v-for="article in articles">
+            <article-preview :article="article" />
+          </template>
 
         </div>
 
@@ -86,15 +69,49 @@
   </div>
 </template>
 <script>
-import { getProfile } from '@/api/profile'
+import ArticlePreview from '@/components/article-preview'
+import { getProfile, follow, unfollow } from '@/api/profile'
+import { getArticles } from '@/api/article'
+import { mapState } from 'vuex'
+
 export default {
   middleware: 'authenticated',
   name: 'UserProfile',
-  async asyncData({ params }) {
+  watchQuery: ['tab'],
+  async asyncData({ query, params }) {
     const { data } = await getProfile(params.username)
-    console.log(data)
+    const { profile } = data
+    profile.followDisabled = false
+
+    const tab = query.tab || 'My_Articles'
+    const articleParams = tab == 'My_Articles' ? { author: profile.username } : { favorited: profile.username }
+    const articleData = await getArticles(articleParams)
+    const articles = articleData.data.articles
     return {
-      profile: data.profile
+      profile,
+      articles,
+      tab
+    }
+  },
+  components: {
+    ArticlePreview
+  },
+  computed: {
+    ...mapState(['user'])
+  },
+  methods: {
+    async onFollow(profile) {
+      this.profile.followDisabled = true
+      if (profile.following) {
+        const { data } = await unfollow(profile.username)
+        this.profile = data.profile
+        this.profile.followDisabled = false
+      } else {
+        const { data } = await follow(profile.username)
+        this.profile = data.profile
+        this.profile.followDisabled = true
+      }
+      this.profile.followDisabled = false
     }
   }
 }
