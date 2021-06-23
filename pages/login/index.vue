@@ -65,6 +65,15 @@ export default {
       errors: {} //  错误信息
     }
   },
+  head() {
+    return {
+      title: `${this.isLogin ? 'Login' : 'Register'} — Conduit`,
+      meta: [{
+        hid: 'description',
+        name: 'description'
+      }]
+    }
+  },
   methods: {
     async onSubmit () {
       this.btnDisabled = true

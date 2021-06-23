@@ -139,6 +139,15 @@ export default {
   },
   components: {
     ArticlePreview
+  },
+  head() {
+    return {
+      title: 'Home — Conduit',
+      meta: [{
+        hid: 'description',
+        name: 'description'
+      }]
+    }
   }
 }
 </script>

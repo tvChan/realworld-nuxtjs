@@ -101,6 +101,15 @@ export default {
   computed: {
     ...mapState(['user'])
   },
+  head() {
+    return {
+      title: `${this.profile.username} — Conduit`,
+      meta: [{
+        hid: 'description',
+        name: 'description'
+      }]
+    }
+  },
   methods: {
     // 关注，取消关注
     async onFollow(profile) {

@@ -63,6 +63,15 @@ export default {
       this.article.tagList = this.article.tagList.toString()
     }
   },
+  head() {
+    return {
+      title: `Editor — Conduit`,
+      meta: [{
+        hid: 'description',
+        name: 'description'
+      }]
+    }
+  },
   methods: {
     // 创建、编辑文章
     async createOrUpdate() {

@@ -65,6 +65,15 @@ export default {
       btnDisabled: false
     }
   },
+  head() {
+    return {
+      title: `Settings — Conduit`,
+      meta: [{
+        hid: 'description',
+        name: 'description'
+      }]
+    }
+  },
   methods: {
     // 更新设置
     async updateSetting() {
