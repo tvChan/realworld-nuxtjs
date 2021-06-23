@@ -1,6 +1,6 @@
 ## RealWorld demo made by NuxtJS
 
-### How to run ？
+### How to run ?
 
 #### Development
 
