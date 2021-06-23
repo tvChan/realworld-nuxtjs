@@ -88,3 +88,19 @@ export const deleteArticleComment = (slug, id) => {
     url: `/api/articles/${slug}/comments/${id}`
   })
 }
+
+// 喜欢文章
+export const favoriteArticle = slug => {
+  return request({
+    method: 'POST',
+    url: `/api/articles/${slug}/favorite`
+  })
+}
+
+// 取消喜欢文章
+export const unFavoriteArticle = slug => {
+  return request({
+    method: 'DELETE',
+    url: `/api/articles/${slug}/favorite`
+  })
+}

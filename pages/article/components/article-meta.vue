@@ -18,18 +18,22 @@
     <template v-if="user.username !== article.author.username">
       <button
         class="btn btn-sm btn-outline-secondary"
-        :class="{ active: article.author.following }">
-        <i class="ion-plus-round"></i>
+        :class="{ active: article.author.following }"
+        :disabled="followDisabled"
+        @click="onFollow(article.author)">
+        <i :class="`ion-${article.author.following ? 'minus': 'plus'}-round`"></i>
         &nbsp;
-        Follow {{ article.author.username }}
+        {{ article.author.following ? 'UnFollow' : 'Follow'}} {{ article.author.username }}
       </button>
       &nbsp;&nbsp;
       <button
         class="btn btn-sm btn-outline-primary"
-        :class="{ active: article.favorited }">
+        :class="{ active: article.favorited }"
+        :disabled="favoriteDisabled"
+        @click="onFavorite(article)">
         <i class="ion-heart"></i>
         &nbsp;
-        Favorite Post <span class="counter">({{ article.favoritesCount }})</span>
+        {{ article.favorited ? 'Unfavorite' : 'Favorite'}} Post <span class="counter">({{ article.favoritesCount }})</span>
       </button>
     </template>
     <template v-else>
@@ -54,7 +58,8 @@
   </div>
 </template>
 <script>
-import { deleteArticle } from '@/api/article'
+import { deleteArticle, favoriteArticle, unFavoriteArticle } from '@/api/article'
+import { follow, unfollow } from '@/api/profile'
 import { mapState } from 'vuex'
 
 export default {
@@ -67,13 +72,28 @@ export default {
   },
   data() {
     return {
-      btnDisabled: false
+      btnDisabled: false,
+      followDisabled: false,
+      favoriteDisabled: false
     }
   },
   computed: {
     ...mapState(['user'])
   },
   methods: {
+    // 关注，取消关注
+    async onFollow(author) {
+      this.followDisabled = true
+      if (author.following) {favorite
+        const { data } = await unfollow(author.username)
+        this.article.author.following = false
+      } else {
+        const { data } = await follow(author.username)
+        this.article.author.following = true
+      }
+      this.followDisabled = false
+    },
+    // 跳转编辑文章页
     goEditArticle(slug) {
       this.$router.push({
         name: 'updateEditor',
@@ -82,21 +102,29 @@ export default {
         }
       })
     },
+    // 删除文章
     async goDeleteArticle(article) {
       this.btnDisabled = true
       try {
         const { data } = await deleteArticle(article.slug)
-        console.log(data)
         this.$router.push({
           name: 'profile',
           params: {
             username: article.author.username
           }
         })
-      } catch (err) {
-
-      }
+      } catch (err) {}
       this.btnDisabled = false
+    },
+    // 喜欢，不喜欢文章
+    async onFavorite(article) {
+      this.favoriteDisabled = true
+      try {
+        const { data } = article.favorited ? await unFavoriteArticle(article.slug) : await favoriteArticle(article.slug)
+        this.article.favoritesCount = data.article.favoritesCount
+        this.article.favorited = data.article.favorited
+      } catch(err) {}
+      this.favoriteDisabled = false
     },
   }
 }

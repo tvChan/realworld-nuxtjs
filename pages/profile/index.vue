@@ -108,6 +108,7 @@ export default {
     ...mapState(['user'])
   },
   methods: {
+    // 关注，取消关注
     async onFollow(profile) {
       this.profile.followDisabled = true
       if (profile.following) {
@@ -121,6 +122,7 @@ export default {
       }
       this.profile.followDisabled = false
     },
+    // 跳转个人信息编辑页
     goEditProfile() {
       this.$router.push({
         name: 'settings'
