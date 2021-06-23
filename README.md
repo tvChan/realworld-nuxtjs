@@ -4,15 +4,15 @@
 
 #### Development
 
-- npm install
+1. npm install
 
-- npm run dev
+2. npm run dev
 
 #### Production
 
-- npm install
+1. npm install
 
-- npm run build
+2. npm run build
 
-- npm run start
+3. npm run start
 
