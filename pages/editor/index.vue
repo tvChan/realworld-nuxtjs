@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-import { createArticle, getArticle } from '@/api/article'
+import { createArticle, getArticle, updateArticle } from '@/api/article'
 
 export default {
   // 在路由匹配组件渲染之前会先执行中间件处理
@@ -70,7 +70,7 @@ export default {
       try {
         const article = this.article
         article.tagList = article.tagList.split(',')
-        const { data } = await createArticle({ article })
+        const { data } = this.$route.params.slug ? await updateArticle(article) : await createArticle({ article })
         this.$router.push({
           name: 'article',
           params: {
