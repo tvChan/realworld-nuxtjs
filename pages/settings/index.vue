@@ -37,6 +37,11 @@
               </button>
             </fieldset>
           </form>
+
+          <hr>
+          <button class="btn btn-outline-danger" @click="logout">
+            Or click here to logout.
+          </button>
         </div>
 
       </div>
@@ -45,6 +50,8 @@
 </template>
 <script>
 import { updateUserInfo, getUserInfo } from '@/api/user'
+// 仅在客户端加载 js-cookie 包
+const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   middleware: 'authenticated',
@@ -67,6 +74,7 @@ export default {
       this.btnDisabled = true
       try {
         const { data } = await updateUserInfo({ user: this.user })
+        this.$store.commit('setUser', data.user)
         this.$router.push({
           name: 'profile',
           params: {
@@ -77,6 +85,14 @@ export default {
         this.errors = err.response.data.errors
       }
       this.btnDisabled = false
+    },
+    // 退出登录
+    logout() {
+      this.$store.commit('setUser', null)
+      Cookie.remove('user', '')
+      this.$router.push({
+        name: 'login'
+      })
     }
   }
 }
