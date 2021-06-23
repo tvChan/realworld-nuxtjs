@@ -11,17 +11,17 @@
           </li>
           <template v-if="user">
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/editor" exact>
+              <nuxt-link class="nav-link" to="/editor">
                 <i class="ion-compose"></i>&nbsp;New Post
               </nuxt-link>
             </li>
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/settings" exact>
+              <nuxt-link class="nav-link" to="/settings">
                 <i class="ion-gear-a"></i>&nbsp;Settings
               </nuxt-link>
             </li>
             <li class="nav-item">
-              <nuxt-link class="nav-link" :to="`/profile/${user.username}`" exact>
+              <nuxt-link class="nav-link" :to="`/profile/${user.username}`">
                 <img :src="user.image" class="user-pic" />
                 {{user.username}}
               </nuxt-link>
@@ -29,10 +29,10 @@
           </template>
           <template v-else>
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/login" exact>Sign in</nuxt-link>
+              <nuxt-link class="nav-link" to="/login">Sign in</nuxt-link>
             </li>
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/register" exact>Sign up</nuxt-link>
+              <nuxt-link class="nav-link" to="/register">Sign up</nuxt-link>
             </li>
           </template>
         </ul>

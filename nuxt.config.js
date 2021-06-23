@@ -1,8 +1,8 @@
 // nuxt.js 配置文件
 module.exports = {
   // 修改首页 路由 激活 添加样式 active 状态
-  linkActiveClass: 'active',
   router: {
+    linkActiveClass: 'active',
     // 自定义路由表
     extendRoutes (routes, resolve) {
       // 清楚 Nuxt.js 基于 pages 目录默认生成的路由表规则
