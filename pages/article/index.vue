@@ -1,35 +1,26 @@
 <template>
+  <!-- 文章详情页 -->
   <div class="article-page">
-
     <div class="banner">
       <div class="container">
-
         <h1>{{ article.title }}</h1>
         <article-meta :article="article" />
       </div>
     </div>
-
     <div class="container page">
-
       <div class="row article-content">
         <div class="col-md-12" v-html="article.body">
         </div>
       </div>
-      
       <article-tags v-if="article.tagList.length" :tagList="article.tagList" />
-
       <hr />
-
       <div class="article-actions">
         <article-meta :article="article" />
       </div>
-
       <div class="row">
         <article-comments :article="article" />
       </div>
-
     </div>
-
   </div>
 </template>
 <script>

@@ -1,15 +1,14 @@
 <template>
+  <!-- 登录、注册页 -->
   <div class="auth-page">
     <div class="container page">
       <div class="row">
-
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">{{isLogin ? 'Sign in' : 'Sign up'}}</h1>
           <p class="text-xs-center">
             <nuxt-link v-if="isLogin" to="/register">Need an account?</nuxt-link>
             <nuxt-link v-else to="/login">Have an account?</nuxt-link>
           </p>
-
           <!-- 错误信息 -->
           <ul class="error-messages">
             <template v-for="(messages, field) in errors">
@@ -17,7 +16,6 @@
             </template>
           </ul>
           <!-- 错误信息 -->
-
           <form @submit.prevent="onSubmit">
             <fieldset v-if="!isLogin" class="form-group">
               <input v-model="user.username" class="form-control form-control-lg" type="text" placeholder="Your Name" required>
@@ -38,7 +36,6 @@
             </button>
           </form>
         </div>
-
       </div>
     </div>
   </div>
@@ -73,7 +70,6 @@ export default {
       this.btnDisabled = true
       try {
         // 提交表单请求登录
-        // const apiType = this.isLogin ? 'login' : 'register'
         const { data } = this.isLogin
           ? await login({
             user: this.user

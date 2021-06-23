@@ -15,6 +15,7 @@ export const follow = username => {
     url: `/api/profiles/${username}/follow`
   })
 }
+
 // 取消关注
 export const unfollow = username => {
   return request({

@@ -1,8 +1,8 @@
 <template>
+  <!-- 文章新建编辑页 -->
   <div class="editor-page">
     <div class="container page">
       <div class="row">
-
         <div class="col-md-10 offset-md-1 col-xs-12">
           <form>
             <fieldset>
@@ -27,14 +27,13 @@
                     placeholder="Enter tags"><div class="tag-list"></div>
               </fieldset>
               <button class="btn btn-lg pull-xs-right btn-primary"
-                type="button" @click="createBtn()"
+                type="button" @click="createOrUpdate()"
                 :disabled="btnDisabled">
                   {{$route.params.slug ? 'Update' : 'Publish' }} Article
               </button>
             </fieldset>
           </form>
         </div>
-
       </div>
     </div>
   </div>
@@ -65,7 +64,8 @@ export default {
     }
   },
   methods: {
-    async createBtn() {
+    // 创建、编辑文章
+    async createOrUpdate() {
       this.btnDisabled = true
       try {
         const article = this.article
@@ -77,9 +77,7 @@ export default {
             slug: data.article.slug
           }
         })
-      } catch (err) {
-
-      }
+      } catch (err) {}
       this.btnDisabled = false
     }
   }

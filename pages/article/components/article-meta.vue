@@ -1,4 +1,5 @@
 <template>
+  <!-- 文章头部按钮区 -->
   <div class="article-meta">
     <nuxt-link :to="{
       name: 'profile',
@@ -125,7 +126,7 @@ export default {
         this.article.favorited = data.article.favorited
       } catch(err) {}
       this.favoriteDisabled = false
-    },
+    }
   }
 }
 </script>

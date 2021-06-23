@@ -1,11 +1,10 @@
 <template>
+  <!-- 个人设置页 -->
   <div class="settings-page">
     <div class="container page">
       <div class="row">
-
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">Your Settings</h1>
-          
           <!-- 错误信息 -->
           <ul class="error-messages">
             <template v-for="(messages, field) in errors">
@@ -13,7 +12,6 @@
             </template>
           </ul>
           <!-- 错误信息 -->
-
           <form>
             <fieldset>
               <fieldset class="form-group">
@@ -37,13 +35,11 @@
               </button>
             </fieldset>
           </form>
-
           <hr>
           <button class="btn btn-outline-danger" @click="logout">
             Or click here to logout.
           </button>
         </div>
-
       </div>
     </div>
   </div>
@@ -70,6 +66,7 @@ export default {
     }
   },
   methods: {
+    // 更新设置
     async updateSetting() {
       this.btnDisabled = true
       try {

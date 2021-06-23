@@ -1,4 +1,5 @@
 <template>
+  <!-- 文章评论 -->
   <div class="col-xs-12 col-md-8 offset-md-2">
     <form v-if="user" class="card comment-form">
       <div class="card-block">
@@ -72,6 +73,7 @@ export default {
     this.getCommentsList()
   },
   methods: {
+    // 获取评论列表
     async getCommentsList() {
       const { data } = await getComments(this.article.slug)
       this.comments = data.comments
