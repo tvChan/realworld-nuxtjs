@@ -46,14 +46,6 @@ export const deleteArticle = slug => {
   })
 }
 
-// 获取文章评论
-export const getComments = slug => {
-  return request({
-    method: 'GET',
-    url: `/api/articles/${slug}/comments`
-  })
-}
-
 // 创建文章
 export const createArticle = data => {
   return request({
@@ -63,4 +55,36 @@ export const createArticle = data => {
   })
 }
 
+// 更新文章
+export const updateArticle = data => {
+  return request({
+    method: 'PUT',
+    url: `/api/articles/${data.slug}`,
+    data
+  })
+}
 
+// 获取文章评论
+export const getComments = slug => {
+  return request({
+    method: 'GET',
+    url: `/api/articles/${slug}/comments`
+  })
+}
+
+// 添加文章评论
+export const addArticleComment = (slug, data) => {
+  return request({
+    method: 'POST',
+    url: `/api/articles/${slug}/comments`,
+    data
+  })
+}
+
+// 删除文章评论
+export const deleteArticleComment = (slug, id) => {
+  return request({
+    method: 'DELETE',
+    url: `/api/articles/${slug}/comments/${id}`
+  })
+}

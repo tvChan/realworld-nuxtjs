@@ -2,11 +2,13 @@
   <div class="col-xs-12 col-md-8 offset-md-2">
     <form v-if="user" class="card comment-form">
       <div class="card-block">
-        <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+        <textarea v-model="comment.body" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
       </div>
       <div class="card-footer">
         <img :src="user.image" class="comment-author-img" />
-        <button class="btn btn-sm btn-primary">
+        <button class="btn btn-sm btn-primary"
+          :disabled="!comment.body || btnDisabled"
+          @click="addComment">
         Post Comment
         </button>
       </div>
@@ -25,7 +27,7 @@
             username: comment.author.username
           }
         }">
-          <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+          <img :src="comment.author.image" class="comment-author-img" />
         </nuxt-link>
         &nbsp;
         <nuxt-link class="comment-author" :to="{
@@ -34,13 +36,16 @@
             username: comment.author.username
           }
         }">{{ comment.author.username }}</nuxt-link>
-        <span class="date-posted">{{ comment.createdAt | date('MMM DD, YYYY')}}</span>
+        <span class="date-posted">{{ comment.createdAt | date('MMM DD, YYYY HH:mm:ss')}}</span>
+        <span v-if="comment.author.username == user.username" class="mod-options">
+          <i class="ion-trash-a" @click="deleteComment(comment.id)"></i>
+        </span>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { getComments } from '@/api/article'
+import { getComments, addArticleComment, deleteArticleComment } from '@/api/article'
 import { mapState } from 'vuex'
 
 export default {
@@ -53,6 +58,10 @@ export default {
   },
   data() {
     return {
+      btnDisabled: false,
+      comment: {
+        body: ''
+      },
       comments: [] // 文章列表
     }
   },
@@ -60,8 +69,30 @@ export default {
     ...mapState(['user'])
   },
   async mounted() {
-    const { data } = await getComments(this.article.slug)
-    this.comments = data.comments
+    this.getCommentsList()
+  },
+  methods: {
+    async getCommentsList() {
+      const { data } = await getComments(this.article.slug)
+      this.comments = data.comments
+    },
+    // 添加评论
+    async addComment() {
+      this.btnDisabled = true
+      try {
+        const { data } = await addArticleComment(this.article.slug, this.comment)
+        this.getCommentsList()
+        this.comment.body = ''
+      } catch (err) {}
+      this.btnDisabled = false
+    },
+    // 删除评论
+    async deleteComment(commentId) {
+      try {
+        await deleteArticleComment(this.article.slug, commentId)
+        this.getCommentsList()
+      } catch (err) {}
+    }
   }
 }
 </script>
