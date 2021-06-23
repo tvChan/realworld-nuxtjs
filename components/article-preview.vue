@@ -32,11 +32,13 @@
       <h1>{{ article.title }}</h1>
       <p>{{ article.description }}</p>
       <span>Read more...</span>
+      <article-tags v-if="article.tagList.length" :tagList="article.tagList" />
     </nuxt-link>
   </div>
 </template>
 <script>
 import { addFavorite, deleteFavorite } from '@/api/article'
+import ArticleTags from '@/pages/article/components/article-tags'
 
 export default {
   name: 'ArticlePreview',
@@ -45,6 +47,9 @@ export default {
       type: Object,
       required: true
     }
+  },
+  components: {
+    ArticleTags
   },
   methods: {
     async onFavorite(article) {

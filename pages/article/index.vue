@@ -15,6 +15,8 @@
         <div class="col-md-12" v-html="article.body">
         </div>
       </div>
+      
+      <article-tags v-if="article.tagList.length" :tagList="article.tagList" />
 
       <hr />
 
@@ -23,9 +25,7 @@
       </div>
 
       <div class="row">
-
         <article-comments :article="article" />
-
       </div>
 
     </div>
@@ -37,6 +37,7 @@ import { getArticle } from '@/api/article'
 import MarkdownIt from 'markdown-it'
 import ArticleMeta from './components/article-meta'
 import ArticleComments from './components/article-comments'
+import ArticleTags from './components/article-tags'
 
 export default {
   name: 'ArticleIndex',
@@ -51,7 +52,8 @@ export default {
   },
   components: {
     ArticleMeta,
-    ArticleComments
+    ArticleComments,
+    ArticleTags
   },
   head() {
     return {
